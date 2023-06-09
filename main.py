@@ -48,7 +48,7 @@ class precise_landing():
         self.land2=0
 
         ## defining camera object
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture()
 
     def arm_and_takeoff(self,altitude):
         ''' function for takeoff the drone at given altitude '''
