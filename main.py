@@ -174,7 +174,7 @@ class precise_landing():
 
 def main():
     ##defining drone
-    drone = connect('/dev/ttyACM0', baud=115200)
+    drone = connect('udp::14550',wait_ready=True)
 
     ## defining camera callibration files
     calib_path = "AP/"
