@@ -238,7 +238,7 @@ class ArucoSingleTracker():
 
         if show_video:
             # --- Display the frame
-            cv2.imshow('frame', frame)
+            #cv2.imshow('frame', frame)
 
             # --- use 'q' to quit
             key = cv2.waitKey(1) & 0xFF
