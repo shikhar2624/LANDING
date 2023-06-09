@@ -7,7 +7,7 @@ from gi.repository import Gst, GLib
 Gst.init(None)
 
 # Create the pipeline
-pipeline = Gst.parse_launch("appsrc name=source ! videoconvert ! video/x-raw,format=BGR ! videoconvert ! image/jpeg ! rtpjpegpay ! udpsink host=$myip port=$myport")
+pipeline = Gst.parse_launch("appsrc name=source ! videoconvert ! video/x-raw,format=BGR ! videoconvert ! image/jpeg ! rtpjpegpay ! udpsink host=192.168.0.58 port=8000")
 
 # Start the pipeline
 pipeline.set_state(Gst.State.PLAYING)
