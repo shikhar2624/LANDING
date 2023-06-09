@@ -147,8 +147,7 @@ class precise_landing():
                     
                     ##calculating velocity
                     vx,vy=self.velocity_calculate(x_cm,y_cm)
-                    print(f'vx: {vx} | vy: {vy}')
-
+                    print(f'vx: {vx} | vy: {vy} | xcm: {x_cm} | ycm: {y_cm}')
                     if self.land==1 or self.land2==1:
                         self.land2=1  
                         print('landing to be started')
