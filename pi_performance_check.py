@@ -31,3 +31,5 @@ def my_background_task():
         print("Temperature Info–>", cpu_temp)
         print("")
         time.sleep(5)
+
+my_background_task()
