@@ -11,18 +11,13 @@ pipeline = Gst.parse_launch("v4l2src device=/dev/video0 ! image/jpeg,width=1280,
 # Start the pipeline
 pipeline.set_state(Gst.State.PLAYING)
 
-# Wait until error or EOS (End of Stream) occurs
-bus = pipeline.get_bus()
-msg = bus.timed_pop_filtered(Gst.CLOCK_TIME_NONE, Gst.MessageType.ERROR | Gst.MessageType.EOS)
+try:
+    # Run the pipeline
+    while True:
+        pass
 
-# Parse the message
-if msg:
-    if msg.type == Gst.MessageType.ERROR:
-        error, debug_info = msg.parse_error()
-        print("Error received from element {}: {}".format(msg.src.get_name(), error))
-        print("Debugging information: {}".format(debug_info))
-    elif msg.type == Gst.MessageType.EOS:
-        print("End of stream reached")
+except KeyboardInterrupt:
+    pass
 
 # Stop the pipeline
 pipeline.set_state(Gst.State.NULL)
