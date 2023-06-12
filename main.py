@@ -176,7 +176,8 @@ class precise_landing():
                         print('moving towards aruco')  
                         # self.goto_position_target_local_ned(vx,vy,0)
 
-                elif  self.vehicle.location.global_relative_frame.alt>=0.95:
+                # elif  self.vehicle.location.global_relative_frame.alt>=0.95:
+                else:
                     print('aruco not detected')
                     # self.goto_position_target_local_ned(0,0,0)  ##giving zero velocity commands
             else:

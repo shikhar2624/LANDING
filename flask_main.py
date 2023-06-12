@@ -14,7 +14,7 @@ def index():
     return render_template('index.html')
 
 def generate_frames():
-    global frame
+    global frame  
     # while True:
     #     success, frame = camera.read()
     #     if not success:
