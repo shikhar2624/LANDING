@@ -3,17 +3,18 @@ import cv2
 import os
 import sys
 
-sys.path.append('AP')
-from cpp import ArucoSingleTracker
+from main import aruco_tracker
 
 app = Flask(__name__)
-camera = cv2.VideoCapture(0)
+frame=aruco_tracker.live_frames
+# camera = cv2.VideoCapture(0)
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def generate_frames(frame):
+def generate_frames():
+    global frame
     # while True:
     #     success, frame = camera.read()
     #     if not success:
