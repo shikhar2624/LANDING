@@ -22,7 +22,7 @@ try:
         ret, frame = cv2.VideoCapture(0).read()
         if not ret:
             break
-
+        print(ret)
         # Convert the OpenCV image to a GStreamer buffer
         _, buffer = cv2.imencode('.jpeg', frame)
         gst_buffer = Gst.Buffer.new_allocate(None, len(buffer), None)
