@@ -160,6 +160,7 @@ class ArucoSingleTracker():
         # ret, frame = self._cap.read()
 
         self._update_fps_read()
+        self.live_frames=frame
 
         # -- Convert in gray scale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # -- remember, OpenCV stores color images in Blue, Green, Red
@@ -250,7 +251,8 @@ class ArucoSingleTracker():
             #     self._cap.release()
             #     cv2.destroyAllWindows()
             #     exit()
-            self.live_frames=frame
+            # self.live_frames=frame
+            pass
 
         if not loop: return marker_found, x, y, z
 

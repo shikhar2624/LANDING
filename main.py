@@ -184,6 +184,7 @@ class precise_landing():
                 print('Camera Frames Not Received')
 
 def main():
+    global aruco_tracker
     ##defining drone
     drone = connect('udp::14550',wait_ready=True)
     print('drone connected succesfully')
