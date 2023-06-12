@@ -7,7 +7,7 @@ from gi.repository import Gst, GLib
 Gst.init(None)
 
 # Create the pipeline
-pipeline = Gst.parse_launch("appsrc name=source ! videoconvert ! video/x-raw,format=BGR ! videoconvert ! image/jpeg ! rtpjpegpay ! udpsink host=192.168.0.58 port=8000")
+pipeline = Gst.parse_launch("appsrc name=source ! videoconvert ! video/x-raw,format=BGR ! videoconvert ! jpegenc ! rtpjpegpay ! udpsink host=192.168.0.58 port=8000")
 
 # Start the pipeline
 pipeline.set_state(Gst.State.PLAYING)
@@ -24,13 +24,9 @@ try:
             break
 
         # Convert the OpenCV image to a GStreamer buffer
-        # _, buffer = cv2.imencode('.jpeg', frame)
-        data = frame.tostring()
-        # gst_buffer = Gst.Buffer.new_allocate(None, len(buffer), None)
-        gst_buffer = Gst.Buffer.new_allocate(None, len(data), None)
-        # gst_buffer.fill(0, buffer.tobytes())
-        gst_buffer.fill(0,data)
-
+        _, buffer = cv2.imencode('.jpeg', frame)
+        gst_buffer = Gst.Buffer.new_allocate(None, len(buffer), None)
+        gst_buffer.fill(0, buffer.tobytes())
 
         # Feed the GStreamer buffer into the appsrc element
         source.emit('push-buffer', gst_buffer)
