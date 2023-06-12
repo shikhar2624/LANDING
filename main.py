@@ -173,7 +173,7 @@ class precise_landing():
 
 def main():
     ##defining drone
-    drone = connect('udp::14550',wait_ready=True)
+    # drone = connect('udp::14550',wait_ready=True)
     print('drone connected succesfully')
 
     ## defining camera callibration files
