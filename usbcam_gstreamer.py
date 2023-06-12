@@ -24,10 +24,9 @@ try:
             break
 
         # Convert the OpenCV image to a GStreamer buffer
-        # _, buffer = cv2.imencode('.jpeg', frame)
-        buffer=frame.tostring()
+        _, buffer = cv2.imencode('.jpeg', frame)
         gst_buffer = Gst.Buffer.new_allocate(None, len(buffer), None)
-        gst_buffer.fill(0, buffer)
+        gst_buffer.fill(0, buffer.tobytes())
 
         # Feed the GStreamer buffer into the appsrc element
         source.emit('push-buffer', gst_buffer)
