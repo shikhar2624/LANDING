@@ -1,5 +1,10 @@
 from flask import Flask, render_template, Response
 import cv2
+import os
+import sys
+
+sys.path.append('AP')
+from cpp import ArucoSingleTracker
 
 app = Flask(__name__)
 camera = cv2.VideoCapture(0)

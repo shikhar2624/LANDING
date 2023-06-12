@@ -42,11 +42,11 @@ import time
 import cv2
 import cv2.aruco as aruco
 import numpy as np
-from flask_main import app,generate_frames
+# from flask_main import app,generate_frames
 
 
 # rospy.init_node('opencv_example', anonymous=True)
-app.run(host='0.0.0.0', port=8000)
+# app.run(host='0.0.0.0', port=8000)
 
 class ArucoSingleTracker():
     def __init__(self,
@@ -92,6 +92,8 @@ class ArucoSingleTracker():
         self._t_detect = self._t_read
         self.fps_read = 0.0
         self.fps_detect = 0.0
+
+        self.live_frames=0
 
 
     def _rotationMatrixToEulerAngles(self, R):
@@ -248,7 +250,7 @@ class ArucoSingleTracker():
             #     self._cap.release()
             #     cv2.destroyAllWindows()
             #     exit()
-            generate_frames(frame)
+            self.live_frames=frame
 
         if not loop: return marker_found, x, y, z
 
