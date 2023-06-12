@@ -4,7 +4,7 @@ from multiprocessing import Process
 
 def send():
     cap_send = cv2.VideoCapture('videotestsrc ! video/x-raw,framerate=20/1 ! videoscale ! videoconvert ! appsink', cv2.CAP_GSTREAMER)
-    out_send = cv2.VideoWriter('appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! rtph264pay ! udpsink host=127.0.0.1 port=5000',cv2.CAP_GSTREAMER,0, 20, (320,240), True)
+    out_send = cv2.VideoWriter('appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! rtph264pay ! udpsink host=192.168.0.58 port=5000',cv2.CAP_GSTREAMER,0, 20, (320,240), True)
 
     if not cap_send.isOpened() or not out_send.isOpened():
         print('VideoCapture or VideoWriter not opened')
