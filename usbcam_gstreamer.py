@@ -22,11 +22,12 @@ try:
         ret, frame = cv2.VideoCapture(0).read()
         if not ret:
             break
-        print(ret)
+
         # Convert the OpenCV image to a GStreamer buffer
-        _, buffer = cv2.imencode('.jpeg', frame)
+        # _, buffer = cv2.imencode('.jpeg', frame)
+        buffer=frame.tostring()
         gst_buffer = Gst.Buffer.new_allocate(None, len(buffer), None)
-        gst_buffer.fill(0, buffer.tobytes())
+        gst_buffer.fill(0, buffer)
 
         # Feed the GStreamer buffer into the appsrc element
         source.emit('push-buffer', gst_buffer)
