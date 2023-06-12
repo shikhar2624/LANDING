@@ -42,9 +42,11 @@ import time
 import cv2
 import cv2.aruco as aruco
 import numpy as np
+from flask_main import app,generate_frames
 
 
 # rospy.init_node('opencv_example', anonymous=True)
+app.run(host='0.0.0.0', port=8000)
 
 class ArucoSingleTracker():
     def __init__(self,
@@ -241,11 +243,12 @@ class ArucoSingleTracker():
             #cv2.imshow('frame', frame)
 
             # --- use 'q' to quit
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord('q'):
-                self._cap.release()
-                cv2.destroyAllWindows()
-                exit()
+            # key = cv2.waitKey(1) & 0xFF
+            # if key == ord('q'):
+            #     self._cap.release()
+            #     cv2.destroyAllWindows()
+            #     exit()
+            generate_frames(frame)
 
         if not loop: return marker_found, x, y, z
 
