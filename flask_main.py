@@ -8,6 +8,7 @@ from main import aruco_tracker
 app = Flask(__name__)
 frame=aruco_tracker.live_frames
 # camera = cv2.VideoCapture(0)
+print(frame)
 
 @app.route('/')
 def index():
