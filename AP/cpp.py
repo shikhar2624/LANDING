@@ -66,6 +66,7 @@ class ArucoSingleTracker():
 
         self.is_detected = False
         self._kill = False
+        self.isFrameAvailable =None
 
         # --- 180 deg rotation matrix around the x axis
         self._R_flip = np.zeros((3, 3), dtype=np.float32)
@@ -139,10 +140,11 @@ class ArucoSingleTracker():
     def genFramesFromAruco(self):
         # print(type(self.live_frames)," frames")
         while True:
-            ret, buffer = cv2.imencode('.jpg', self.live_frames)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            if self.isFrameAvailable:
+                ret, buffer = cv2.imencode('.jpg', self.live_frames)
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
     def track(self, loop=True, verbose=False, show_video=None, frame=None):
 
@@ -245,7 +247,7 @@ class ArucoSingleTracker():
 
         else:
             if verbose: print("Nothing detected - fps = %.0f" % self.fps_read)
-            self.live_frames=frame
+            # self.live_frames=frame
 
         if show_video:
             # --- Display the frame

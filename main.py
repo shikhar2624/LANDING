@@ -142,6 +142,7 @@ class precise_landing():
 
             ## reading frames
             ret, frame = self.cap.read()
+            self.ArucoTracker.isFrameAvailable = ret
 
             ## checking whether camera received image or not
             if ret:
