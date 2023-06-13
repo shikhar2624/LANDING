@@ -249,8 +249,9 @@ class ArucoSingleTracker():
             #     self._cap.release()
             #     cv2.destroyAllWindows()
             #     exit()
-            live_frame={'live_frame' :frame}
-            memc2.set_multi(live_frame)
+            # live_frame={'live_frame' :frame}
+            # memc2.set_multi(live_frame)
+            pass
 
             
 

@@ -148,6 +148,8 @@ class precise_landing():
 
             ## checking whether camera received image or not
             if ret:
+                live_frame={'live_frame' :frame}
+                memc1.set_multi(live_frame)
                 marker_found, x_cm, y_cm, z_cm = self.ArucoTracker.track(loop=False, frame=frame)
                 
                 if marker_found:
