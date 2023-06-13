@@ -7,6 +7,10 @@ from pymavlink import mavutil
 from AP.cpp import *
 import logging
 # from flask_main import RegisterGetFramesFunc
+from flask import Flask, render_template, Response
+
+
+
 
 ## logging part
 
@@ -173,8 +177,14 @@ class precise_landing():
             else:
                 print('Camera Frames Not Received')
 
+getFrames =None
 def main():
-    global aruco_tracker
+    app = Flask(__name__)
+    
+    def RegisterGetFramesFunc(func):
+        global getFrames
+        getFrames =func
+
     ##defining drone
     drone = connect('udp::14550',wait_ready=True)
     print('drone connected succesfully')
@@ -190,7 +200,18 @@ def main():
     aruco_tracker = ArucoSingleTracker(id_to_find=31, marker_size=100, show_video=True, camera_matrix=camera_matrix,
                                     camera_distortion=camera_distortion)
 
-    # RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
+    RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
+
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+    @app.route('/video_feed')
+    def video_feed():
+        return Response(getFrames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+    app.run(host='0.0.0.0', port=8000)
+
 
     test=precise_landing(drone,aruco_tracker)
 

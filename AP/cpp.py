@@ -43,11 +43,10 @@ import cv2
 import cv2.aruco as aruco
 import numpy as np
 # from flask_main import app,generate_frames
-from flask import Flask, render_template, Response
+
 
 # rospy.init_node('opencv_example', anonymous=True)
-app = Flask(__name__)
-app.run(host='0.0.0.0', port=8000)
+# app.run(host='0.0.0.0', port=8000)
 
 class ArucoSingleTracker():
     def __init__(self,
@@ -137,24 +136,12 @@ class ArucoSingleTracker():
     def stop(self):
         self._kill = True
 
-
-    ## flask part
-
-    @app.route('/')
-    def index(self):
-        return render_template('index.html')
-    
-    def generateFrames(self):
+    def genFramesFromAruco(self):
         # print(type(self.live_frames)," frames")
         ret, buffer = cv2.imencode('.jpg', self.live_frames)
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-    
-    @app.route('/video_feed')
-    def video_feed(self):
-        return Response(self.generateFrames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
 
     def track(self, loop=True, verbose=False, show_video=None, frame=None):
 
