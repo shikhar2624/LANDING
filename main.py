@@ -6,6 +6,7 @@ from dronekit import connect, VehicleMode
 from pymavlink import mavutil
 from AP.cpp import *
 import logging
+from flask_main import generate_frames,RegisterGetFramesFunc
 
 ## logging part
 
@@ -27,17 +28,6 @@ f_handler.setFormatter(f_format)
 # Add handlers to the logger
 logger.addHandler(c_handler)
 logger.addHandler(f_handler)
-
-## defining camera callibration files
-calib_path = "AP/"
-camera_matrix = np.loadtxt(calib_path + 'cameraMatrix.txt', delimiter=',')
-camera_distortion = np.loadtxt(calib_path + 'cameraDistortion.txt', delimiter=',')
-
-
-
-## defining aruco tracker
-aruco_tracker = ArucoSingleTracker(id_to_find=31, marker_size=100, show_video=True, camera_matrix=camera_matrix,
-                                camera_distortion=camera_distortion)
 
 
 ## precise landing class
@@ -189,15 +179,18 @@ def main():
     drone = connect('udp::14550',wait_ready=True)
     print('drone connected succesfully')
 
-    # ## defining camera callibration files
-    # calib_path = "AP/"
-    # camera_matrix = np.loadtxt(calib_path + 'cameraMatrix.txt', delimiter=',')
-    # camera_distortion = np.loadtxt(calib_path + 'cameraDistortion.txt', delimiter=',')
+    ## defining camera callibration files
+    calib_path = "AP/"
+    camera_matrix = np.loadtxt(calib_path + 'cameraMatrix.txt', delimiter=',')
+    camera_distortion = np.loadtxt(calib_path + 'cameraDistortion.txt', delimiter=',')
 
 
-    # ## defining aruco tracker
-    # aruco_tracker = ArucoSingleTracker(id_to_find=31, marker_size=100, show_video=True, camera_matrix=camera_matrix,
-    #                                 camera_distortion=camera_distortion)
+
+    ## defining aruco tracker
+    aruco_tracker = ArucoSingleTracker(id_to_find=31, marker_size=100, show_video=True, camera_matrix=camera_matrix,
+                                    camera_distortion=camera_distortion)
+
+    RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
 
     test=precise_landing(drone,aruco_tracker)
 

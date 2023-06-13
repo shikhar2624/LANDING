@@ -55,7 +55,7 @@ class ArucoSingleTracker():
                  camera_matrix,
                  camera_distortion,
                  camera_size=[640, 480],
-                 show_video=False
+                 show_video=False,
                  ):
 
         self.id_to_find = id_to_find
@@ -63,8 +63,6 @@ class ArucoSingleTracker():
         self._show_video = show_video
         self._camera_matrix = camera_matrix
         self._camera_distortion = camera_distortion
-
-
 
         self.is_detected = False
         self._kill = False
@@ -137,6 +135,13 @@ class ArucoSingleTracker():
 
     def stop(self):
         self._kill = True
+
+    def genFramesFromAruco(self):
+        # print(type(self.live_frames)," frames")
+        ret, buffer = cv2.imencode('.jpg', self.live_frames)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
     def track(self, loop=True, verbose=False, show_video=None, frame=None):
 

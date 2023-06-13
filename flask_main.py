@@ -3,18 +3,20 @@ import cv2
 import os
 import sys
 
-from main import aruco_tracker
 
 app = Flask(__name__)
-frame=aruco_tracker.live_frames
 # camera = cv2.VideoCapture(0)
+
+getFrames =None
+def RegisterGetFramesFunc(func):
+    global getFrames
+    getFrames =func
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def generate_frames():
-    global frame  
+def generate_frames(frame):  
     # while True:
     #     success, frame = camera.read()
     #     if not success:
@@ -28,7 +30,7 @@ def generate_frames():
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(getFrames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
