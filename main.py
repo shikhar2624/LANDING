@@ -6,7 +6,7 @@ from dronekit import connect, VehicleMode
 from pymavlink import mavutil
 from AP.cpp import *
 import logging
-from flask_main import generate_frames,RegisterGetFramesFunc
+# from flask_main import RegisterGetFramesFunc
 
 ## logging part
 
@@ -190,7 +190,7 @@ def main():
     aruco_tracker = ArucoSingleTracker(id_to_find=31, marker_size=100, show_video=True, camera_matrix=camera_matrix,
                                     camera_distortion=camera_distortion)
 
-    RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
+    # RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
 
     test=precise_landing(drone,aruco_tracker)
 
