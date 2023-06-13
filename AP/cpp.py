@@ -138,10 +138,11 @@ class ArucoSingleTracker():
 
     def genFramesFromAruco(self):
         # print(type(self.live_frames)," frames")
-        ret, buffer = cv2.imencode('.jpg', self.live_frames)
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        while True:
+            ret, buffer = cv2.imencode('.jpg', self.live_frames)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
     def track(self, loop=True, verbose=False, show_video=None, frame=None):
 
