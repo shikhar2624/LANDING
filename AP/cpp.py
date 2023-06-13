@@ -42,11 +42,10 @@ import time
 import cv2
 import cv2.aruco as aruco
 import numpy as np
-# from flask_main import app,generate_frames
+import memcache   ##for common sharing memory
 
-
-# rospy.init_node('opencv_example', anonymous=True)
-# app.run(host='0.0.0.0', port=8000)
+##initialising memcache client
+memc2=memcache.Client(['127.0.0.1:11211'],debug=1)
 
 class ArucoSingleTracker():
     def __init__(self,
@@ -92,7 +91,7 @@ class ArucoSingleTracker():
         self.fps_read = 0.0
         self.fps_detect = 0.0
 
-        self.live_frames=0
+        # self.live_frames=0
 
 
     def _rotationMatrixToEulerAngles(self, R):
@@ -136,15 +135,6 @@ class ArucoSingleTracker():
 
     def stop(self):
         self._kill = True
-
-    def genFramesFromAruco(self):
-        # print(type(self.live_frames)," frames")
-        while True:
-            if self.isFrameAvailable:
-                ret, buffer = cv2.imencode('.jpg', self.live_frames)
-                frame = buffer.tobytes()
-                yield (b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
     def track(self, loop=True, verbose=False, show_video=None, frame=None):
 
@@ -259,42 +249,12 @@ class ArucoSingleTracker():
             #     self._cap.release()
             #     cv2.destroyAllWindows()
             #     exit()
-            self.live_frames=frame
+            live_frame={'live_frame' :frame}
+            memc2.set_multi(live_frame)
+
             
 
         if not loop: return marker_found, x, y, z
 
         # While end
-
-
-'''id_to_find  = 5
-marker_size  = 10 #- [cm]
-calib_path  = ""
-camera_matrix   = np.loadtxt(calib_path+'cameraMatrix.txt', delimiter=',')
-camera_distortion   = np.loadtxt(calib_path+'cameraDistortion.txt', delimiter=',')                                      
-aruco_tracker = ArucoSingleTracker(id_to_find=5, marker_size=10, show_video=True, camera_matrix=camera_matrix, camera_distortion=camera_distortion)
-bridge = CvBridge()
-
-
-def image_callback(img_msg):
-    # log some info about the image topic
-    rospy.loginfo(img_msg.header)
-
-    # Try to convert the ROS Image message to a CV2 Image
-    try:
-        cv_image = bridge.imgmsg_to_cv2(img_msg, "passthrough")
-    except CvBridgeError:
-        rospy.logerr("CvBridge Error: ")
-
-    # Flip the image 90deg
-    #cv_image = cv2.transpose(cv_image)
-    #cv_image = cv2.flip(cv_image,1)
-
-    # Show the converted image
-    aruco_tracker.track(verbose=True,loop=True, frame=cv_image)
-
-
-sub_image = rospy.Subscriber("/webcam/image_raw", Image, image_callback)
-
-rospy.spin()'''
 

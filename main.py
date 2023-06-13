@@ -6,13 +6,12 @@ from dronekit import connect, VehicleMode
 from pymavlink import mavutil
 from AP.cpp import *
 import logging
-# from flask_main import RegisterGetFramesFunc
-from flask import Flask, render_template, Response
-import _thread as thread
-
-
+import memcache
 
 ## logging part
+
+##initialising memcache client
+memc1=memcache.Client(['127.0.0.1:11211'],debug=1)
 
 # Create a custom logger
 logger = logging.getLogger(__name__)
@@ -144,6 +143,9 @@ class precise_landing():
             ret, frame = self.cap.read()
             self.ArucoTracker.isFrameAvailable = ret
 
+            success={'ret' :ret}
+            memc1.set_multi(success)
+
             ## checking whether camera received image or not
             if ret:
                 marker_found, x_cm, y_cm, z_cm = self.ArucoTracker.track(loop=False, frame=frame)
@@ -178,17 +180,14 @@ class precise_landing():
             else:
                 print('Camera Frames Not Received')
 
-getFrames =None
 def main():
-    app = Flask(__name__)
     
-    def RegisterGetFramesFunc(func):
-        global getFrames
-        getFrames =func
-
     ##defining drone
     drone = connect('udp::14550',wait_ready=True)
     print('drone connected succesfully')
+
+
+
 
     ## defining camera callibration files
     calib_path = "AP/"
@@ -202,25 +201,9 @@ def main():
                                     camera_distortion=camera_distortion)
     test=precise_landing(drone,aruco_tracker)
 
-    RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
-    thread.start_new_thread(test.finalloop,())
-
-    @app.route('/')
-    def index():
-        return render_template('index.html')
-
-    @app.route('/video_feed')
-    def video_feed():
-        return Response(getFrames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-    app.run(host='0.0.0.0', port=8000)
-
-
-
-
     ## takeoff drone to given altitude
     # test.arm_and_takeoff(1)
-    # test.finalloop()
+    test.finalloop()
 
 if __name__ == '__main__':
     main()
