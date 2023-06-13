@@ -18,6 +18,7 @@ def generate_frames():
     while True:
         # success, frame = camera.read()
         data=memc3.get_multi(['ret','live_frame'])
+        print(data)
         success=data['ret']
 
         if not success:
