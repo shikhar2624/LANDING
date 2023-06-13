@@ -8,7 +8,7 @@ from AP.cpp import *
 import logging
 # from flask_main import RegisterGetFramesFunc
 from flask import Flask, render_template, Response
-
+import _thread as thread
 
 
 
@@ -200,7 +200,9 @@ def main():
     aruco_tracker = ArucoSingleTracker(id_to_find=31, marker_size=100, show_video=True, camera_matrix=camera_matrix,
                                     camera_distortion=camera_distortion)
     test=precise_landing(drone,aruco_tracker)
+
     RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
+    thread.start_new_thread(test.finalloop,())
 
     @app.route('/')
     def index():
@@ -217,7 +219,7 @@ def main():
 
     ## takeoff drone to given altitude
     # test.arm_and_takeoff(1)
-    test.finalloop()
+    # test.finalloop()
 
 if __name__ == '__main__':
     main()
