@@ -199,7 +199,7 @@ def main():
     ## defining aruco tracker
     aruco_tracker = ArucoSingleTracker(id_to_find=31, marker_size=100, show_video=True, camera_matrix=camera_matrix,
                                     camera_distortion=camera_distortion)
-
+    test=precise_landing(drone,aruco_tracker)
     RegisterGetFramesFunc(aruco_tracker.genFramesFromAruco)
 
     @app.route('/')
@@ -213,7 +213,7 @@ def main():
     app.run(host='0.0.0.0', port=8000)
 
 
-    test=precise_landing(drone,aruco_tracker)
+
 
     ## takeoff drone to given altitude
     # test.arm_and_takeoff(1)
